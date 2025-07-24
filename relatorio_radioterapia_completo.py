@@ -96,7 +96,6 @@ def gerar_pdf(dados):
     y = draw_multiline("Paciente", dados["Paciente"], y)
     y = draw_multiline("Neoplasia", dados["Neoplasia"], y)
     y = draw_multiline("Diagnóstico / Estadiamento", dados["Diagnóstico / Estadiamento"], y)
-    y = draw_multiline("Recomendações", dados["Recomendações"], y)
     y = draw_multiline("Volume Alvo", dados["Volume Alvo"], y)
     y = draw_multiline("Dose Total (cGy)", dados["Dose Total"], y)
     y = draw_multiline("Fracionamento", dados["Fracionamento"], y)
@@ -177,8 +176,6 @@ Diagnostico_padrao = {
 # === Estado inicial ===
 if "tumor_tipo" not in st.session_state:
     st.session_state.tumor_tipo = "Canal anal"
-if "recomendacoes" not in st.session_state:
-    st.session_state.recomendacoes = recomendacoes_padrao["Canal anal"]
 if "diagnostico" not in st.session_state:
     st.session_state.diagnostico = Diagnostico_padrao["Canal anal"]    
 if "tumor_customizado" not in st.session_state:
@@ -186,7 +183,6 @@ if "tumor_customizado" not in st.session_state:
 
 # === Atualiza diagnóstico e recomendação automática ===
 def atualizar_recomendacoes_e_diagnostico():
-    st.session_state.recomendacoes = recomendacoes_padrao.get(st.session_state.tumor_tipo, "")
     st.session_state.diagnostico = Diagnostico_padrao.get(st.session_state.tumor_tipo, "")
     if st.session_state.tumor_tipo != "Outro":
         st.session_state.tumor_customizado = ""
@@ -313,8 +309,6 @@ tipo = st.selectbox("Tipo de tratamento", ["Conformacional", "IMRT/VMAT", "Radio
 
 
 
-# Recomendações automáticas
-st.text_area("Recomendações médicas", key="recomendacoes", height=150)
 
 # Botão
 if st.button("Gerar PDF"):
@@ -340,7 +334,6 @@ if st.button("Gerar PDF"):
         "Tipo de tratamento": tipo,
         "Início": inicio.strftime("%d/%m/%Y"),
         "Término": fim.strftime("%d/%m/%Y"),
-        "Recomendações": st.session_state.recomendacoes,
         "Descricao": "O Planejamento detalhado (fusões, contornos, curvas de isodose, DVH, DRR, QA) encontra-se em nossos arquivos e a disposição do paciente e colegas médicos.",
         "Médico Responsável": "Dr. Fernando José de Almeida"
     }
